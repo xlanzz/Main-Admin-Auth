@@ -1,0 +1,13 @@
+# Pemilik default untuk semua file di repositori
+* @yourusername
+
+# File-file konfigurasi Next.js
+next.config.* @yourusername
+tailwind.config.* @yourusername
+
+# API routes
+/src/app/api/ @yourusername
+
+# File-file konfigurasi
+.env.example @yourusername
+vercel.json @yourusername 
