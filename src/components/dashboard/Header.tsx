@@ -5,11 +5,37 @@ import Link from 'next/link';
 import { useAuth } from '@/context/AuthContext';
 import { useTheme } from '@/context/ThemeContext';
 import { Switch } from '@/components/ui/switch';
+import { usePathname } from 'next/navigation';
+
+// Mobile nav items (termasuk WhatsApp)
+const mobileNavItems = [
+  { label: 'Dashboard', href: '/dashboard', icon: '🏠' },
+  { label: 'WhatsApp', href: '/dashboard/whatsapp', icon: '💬' },
+  { label: 'Users', href: '/dashboard/users', icon: '👥' },
+  { label: 'Settings', href: '/dashboard/settings', icon: '⚙️' }
+];
+
+function getPageTitle(pathname: string) {
+  if (pathname === '/dashboard') return 'Dashboard';
+  if (pathname === '/dashboard/users') return 'Users';
+  if (pathname === '/dashboard/settings') return 'Settings';
+  if (pathname === '/dashboard/whatsapp') return 'WhatsApp';
+  
+  if (pathname.startsWith('/dashboard/users/')) return 'Users';
+  if (pathname.startsWith('/dashboard/settings/')) return 'Settings';
+  if (pathname.startsWith('/dashboard/whatsapp/')) return 'WhatsApp';
+  
+  return 'Dashboard';
+}
 
 export default function Header() {
+  const pathname = usePathname();
   const { admin, logout } = useAuth();
   const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  
+  // Menggunakan getPageTitle
+  const pageTitle = getPageTitle(pathname);
 
   const handleLogout = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -53,6 +79,11 @@ export default function Header() {
               Admin Panel
             </Link>
           </div>
+          
+          {/* Page title (dekstop) */}
+          <div className="hidden md:block">
+            <h1 className="text-xl font-semibold dark:text-white">{pageTitle}</h1>
+          </div>
         </div>
         
         {/* User profile menu */}
@@ -87,27 +118,21 @@ export default function Header() {
       {isMobileMenuOpen && (
         <div className="block md:hidden bg-white border-t border-neutral-200 dark:bg-neutral-900 dark:border-neutral-800">
           <nav className="flex flex-col p-2">
-            <Link 
-              href="/dashboard" 
-              className="px-4 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 rounded-md"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Dashboard
-            </Link>
-            <Link 
-              href="/dashboard/users" 
-              className="px-4 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 rounded-md"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Users
-            </Link>
-            <Link 
-              href="/dashboard/settings" 
-              className="px-4 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 rounded-md"
-              onClick={() => setIsMobileMenuOpen(false)}
-            >
-              Settings
-            </Link>
+            {mobileNavItems.map((item) => (
+              <Link 
+                key={item.href}
+                href={item.href}
+                className={`px-4 py-2 text-neutral-600 hover:bg-neutral-100 dark:text-neutral-300 dark:hover:bg-neutral-800 rounded-md ${
+                  pathname === item.href 
+                    ? 'bg-neutral-900 text-white dark:bg-white dark:text-neutral-900' 
+                    : ''
+                }`}
+                onClick={() => setIsMobileMenuOpen(false)}
+              >
+                <span className="mr-3">{item.icon}</span>
+                <span>{item.label}</span>
+              </Link>
+            ))}
             <button
               onClick={handleLogout}
               className="mt-2 px-4 py-2 text-red-600 hover:bg-red-100 dark:text-red-500 dark:hover:bg-red-900/20 rounded-md text-left flex items-center"

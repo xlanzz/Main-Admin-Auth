@@ -125,7 +125,7 @@ export default function SettingsPage() {
         </TabsList>
 
         <TabsContent value="general" className="space-y-4">
-          <Card>
+          <Card className="dark:bg-neutral-900 dark:border-neutral-800">
             <CardHeader>
               <CardTitle>General Settings</CardTitle>
               <CardDescription>
@@ -158,7 +158,7 @@ export default function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="appearance" className="space-y-4">
-          <Card>
+          <Card className="dark:bg-neutral-900 dark:border-neutral-800">
             <CardHeader>
               <CardTitle>Appearance Settings</CardTitle>
               <CardDescription>
@@ -186,7 +186,7 @@ export default function SettingsPage() {
         </TabsContent>
 
         <TabsContent value="notifications" className="space-y-4">
-          <Card>
+          <Card className="dark:bg-neutral-900 dark:border-neutral-800">
             <CardHeader>
               <CardTitle>Notification Settings</CardTitle>
               <CardDescription>

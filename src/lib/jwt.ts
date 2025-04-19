@@ -3,8 +3,12 @@ import { SignJWT, jwtVerify } from 'jose';
 import { cookies } from 'next/headers';
 import { NextRequest } from 'next/server';
 
-// Pastikan secret key tersedia
-const JWT_SECRET: Secret = process.env.JWT_SECRET || 'your-secret-key';
+// Make sure JWT secret key is available and valid
+const JWT_SECRET: Secret = process.env.JWT_SECRET || '';
+
+if (!JWT_SECRET) {
+  console.warn('Warning: JWT_SECRET is not set in environment variables. Using an insecure fallback (not recommended for production).');
+}
 
 interface AdminPayload {
   id: string;
@@ -15,13 +19,15 @@ interface AdminPayload {
 
 export async function signJwtToken(payload: AdminPayload, expiresIn = '1d'): Promise<string> {
   try {
-    console.log('JWT - Signing token with payload:', JSON.stringify(payload));
+    if (!JWT_SECRET) {
+      throw new Error('JWT_SECRET environment variable is not set');
+    }
+    
     const token = jwt.sign(
       payload, 
       JWT_SECRET, 
-      { expiresIn } as SignOptions
+      { expiresIn, algorithm: 'HS256' } as SignOptions
     );
-    console.log('JWT - Token signed successfully');
     return token;
   } catch (error) {
     console.error('JWT - Error signing JWT:', error);
@@ -31,12 +37,23 @@ export async function signJwtToken(payload: AdminPayload, expiresIn = '1d'): Pro
 
 export async function verifyJwtToken(token: string): Promise<JwtPayload | null> {
   try {
-    console.log('JWT - Verifying token');
-    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
-    console.log('JWT - Token verified successfully');
+    if (!token || !JWT_SECRET) {
+      return null;
+    }
+    
+    const decoded = jwt.verify(token, JWT_SECRET, { 
+      algorithms: ['HS256']
+    }) as JwtPayload;
     return decoded;
   } catch (error) {
-    console.error('JWT - Error verifying JWT:', error);
+    // Don't log sensitive information about token verification failures
+    if (error instanceof jwt.TokenExpiredError) {
+      console.warn('JWT - Token expired');
+    } else if (error instanceof jwt.JsonWebTokenError) {
+      console.warn('JWT - Invalid token');
+    } else {
+      console.error('JWT - Error verifying token:', error);
+    }
     return null;
   }
 }
@@ -44,38 +61,48 @@ export async function verifyJwtToken(token: string): Promise<JwtPayload | null> 
 export async function getJwtSecretKey() {
   const secret = process.env.JWT_SECRET;
 
-  if (!secret) {
-    throw new Error("JWT Secret key is not set in .env file");
+  if (!secret || secret.length === 0) {
+    throw new Error("JWT Secret key is not set in environment variables");
   }
 
   return new TextEncoder().encode(secret);
 }
 
 export async function encrypt(payload: Record<string, string | number | boolean | null | undefined>) {
-  const key = await getJwtSecretKey();
-  
-  return await new SignJWT(payload)
-    .setProtectedHeader({ alg: "HS256" })
-    .setIssuedAt()
-    .setExpirationTime("1d")
-    .sign(key);
+  try {
+    const key = await getJwtSecretKey();
+    
+    return await new SignJWT(payload)
+      .setProtectedHeader({ alg: "HS256" })
+      .setIssuedAt()
+      .setExpirationTime("1d")
+      .sign(key);
+  } catch (error) {
+    console.error('Error encrypting payload:', error);
+    throw new Error('Failed to encrypt payload');
+  }
 }
 
 export async function decrypt(token: string) {
-  const key = await getJwtSecretKey();
-  
-  const { payload } = await jwtVerify(token, key, {
-    algorithms: ["HS256"],
-  });
-  
-  return payload;
+  try {
+    const key = await getJwtSecretKey();
+    
+    const { payload } = await jwtVerify(token, key, {
+      algorithms: ["HS256"],
+    });
+    
+    return payload;
+  } catch (error) {
+    console.error('Error decrypting token:', error);
+    return null;
+  }
 }
 
 export async function getJwtFromCookies() {
   try {
     const cookieStore = await cookies();
     const token = cookieStore.get('adminToken')?.value;
-    return token;
+    return token || null;
   } catch (error) {
     console.error('JWT - Error accessing cookies:', error);
     return null;
@@ -83,15 +110,17 @@ export async function getJwtFromCookies() {
 }
 
 export function getJwtFromAuthHeader(request: NextRequest) {
-  const authHeader = request.headers.get('authorization');
-  console.log('JWT - Authorization header:', authHeader ? 'Present' : 'Not present');
-  
-  if (!authHeader || !authHeader.startsWith('Bearer ')) {
-    console.log('JWT - No valid Bearer token in Authorization header');
+  try {
+    const authHeader = request.headers.get('authorization');
+    
+    if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      return null;
+    }
+    
+    const token = authHeader.split(' ')[1];
+    return token;
+  } catch (error) {
+    console.error('JWT - Error extracting token from header:', error);
     return null;
   }
-  
-  const token = authHeader.split(' ')[1];
-  console.log('JWT - Token extracted from Authorization header');
-  return token;
 } 
