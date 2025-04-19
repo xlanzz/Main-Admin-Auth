@@ -37,8 +37,8 @@ Admin panel untuk BotWA dengan autentikasi JWT, MongoDB, dan Next.js. Platform i
 1. **Clone Repository**
 
    ```bash
-   git clone https://github.com/yourusername/botwa-vercel.git
-   cd botwa-vercel
+   git clone https://github.com/wahdalo/panel-vercel.git
+   cd panel-vercel
    ```
 
 2. **Install Dependencies**
@@ -195,4 +195,4 @@ Jika Anda memiliki pertanyaan atau saran, silakan buka issue di repository ini.
 
 ---
 
-Dibuat dengan ❤️ oleh [Your Name](https://github.com/yourusername)
+Dibuat dengan ❤️ oleh [Wahdalo](https://github.com/wahdalo)
