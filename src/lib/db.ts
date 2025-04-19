@@ -12,11 +12,13 @@ const globalMongooseCache: ConnectionCache = {
   promise: null
 };
 
-const MONGODB_URI = process.env.MONGODB_URI!;
+const MONGODB_URI = process.env.MONGODB_URI;
 
 if (!MONGODB_URI) {
   throw new Error('Please define the MONGODB_URI environment variable');
 }
+
+const MONGODB_URI_STRING: string = MONGODB_URI;
 
 async function connectToDatabase(): Promise<typeof mongoose> {
   if (globalMongooseCache.conn) {
@@ -28,7 +30,7 @@ async function connectToDatabase(): Promise<typeof mongoose> {
       bufferCommands: false,
     };
 
-    globalMongooseCache.promise = mongoose.connect(MONGODB_URI, opts);
+    globalMongooseCache.promise = mongoose.connect(MONGODB_URI_STRING, opts);
   }
 
   try {

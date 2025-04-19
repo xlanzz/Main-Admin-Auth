@@ -9,6 +9,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    
+    env:
+      MONGODB_URI: mongodb://127.0.0.1:27017/botwa-test
+      JWT_SECRET: github-actions-test-secret-key-for-ci-build-only
+      NODE_ENV: test
+      NEXT_PUBLIC_BASE_URL: http://localhost:3000
 
     strategy:
       matrix:
@@ -16,14 +22,24 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    
+    - name: Start MongoDB
+      uses: supercharge/mongodb-github-action@1.10.0
+      with:
+        mongodb-version: 6.0
+        mongodb-port: 27017
+    
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v3
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
+    
     - name: Install dependencies
       run: npm install --legacy-peer-deps
+    
     - name: Build project  
       run: npm run build --if-present
+    
     - name: Lint project
       run: npm run lint --if-present 
