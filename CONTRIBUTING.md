@@ -1,11 +1,11 @@
 # Panduan Kontribusi
 
-Terima kasih telah mempertimbangkan untuk berkontribusi pada BotWA Admin Panel! Kami sangat menghargai bantuan Anda.
+Terima kasih telah mempertimbangkan untuk berkontribusi pada Admin Panel! Kami sangat menghargai bantuan Anda.
 
 ## Cara Berkontribusi
 
 1. Fork repositori ini
-2. Clone fork Anda (`git clone https://github.com/username_anda/botwa-vercel.git`)
+2. Clone fork Anda (`git clone https://github.com/username_anda/admin-panel.git`)
 3. Buat branch fitur baru (`git checkout -b feature/fitur-luar-biasa`)
 4. Commit perubahan Anda (`git commit -am 'Menambahkan fitur luar biasa'`)
 5. Push ke branch (`git push origin feature/fitur-luar-biasa`)

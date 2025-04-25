@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     
     env:
-      MONGODB_URI: mongodb://127.0.0.1:27017/botwa-test
+      MONGODB_URI: mongodb://127.0.0.1:27017/admin-panel-test
       JWT_SECRET: github-actions-test-secret-key-for-ci-build-only
       NODE_ENV: test
       NEXT_PUBLIC_BASE_URL: http://localhost:3000

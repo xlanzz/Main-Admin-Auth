@@ -7,10 +7,9 @@ import { useTheme } from '@/context/ThemeContext';
 import { Switch } from '@/components/ui/switch';
 import { usePathname } from 'next/navigation';
 
-// Mobile nav items (termasuk WhatsApp)
+// Mobile nav items (termasuk Modules)
 const mobileNavItems = [
   { label: 'Dashboard', href: '/dashboard', icon: '🏠' },
-  { label: 'WhatsApp', href: '/dashboard/whatsapp', icon: '💬' },
   { label: 'Users', href: '/dashboard/users', icon: '👥' },
   { label: 'Settings', href: '/dashboard/settings', icon: '⚙️' }
 ];
@@ -19,11 +18,11 @@ function getPageTitle(pathname: string) {
   if (pathname === '/dashboard') return 'Dashboard';
   if (pathname === '/dashboard/users') return 'Users';
   if (pathname === '/dashboard/settings') return 'Settings';
-  if (pathname === '/dashboard/whatsapp') return 'WhatsApp';
+  if (pathname === '/dashboard/modules') return 'Modules';
   
   if (pathname.startsWith('/dashboard/users/')) return 'Users';
   if (pathname.startsWith('/dashboard/settings/')) return 'Settings';
-  if (pathname.startsWith('/dashboard/whatsapp/')) return 'WhatsApp';
+  if (pathname.startsWith('/dashboard/modules/')) return 'Modules';
   
   return 'Dashboard';
 }

@@ -24,8 +24,8 @@ export default function SettingsPage() {
   const [isSaving, setIsSaving] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [settings, setSettings] = useState<AppSettings>({
-    appName: 'Bot WA Admin',
-    apiUrl: 'https://api.botwa.com',
+    appName: 'Admin Panel',
+    apiUrl: 'https://api.adminpanel.com',
     maxFileSize: 10,
     notificationsEnabled: true,
     darkModeEnabled: false,

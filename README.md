@@ -1,12 +1,12 @@
-# 🚀 BotWA Admin Panel
+# 🚀 Admin Panel
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Node](https://img.shields.io/badge/node-%3E%3D18.0.0-green.svg)
 ![Next.js](https://img.shields.io/badge/next.js-15.x-black)
 
-Admin panel untuk BotWA dengan autentikasi JWT, MongoDB, dan Next.js. Platform ini memungkinkan admin mengelola bot WhatsApp dengan antarmuka yang intuitif dan responsif.
+Admin panel dengan autentikasi JWT, MongoDB, dan Next.js. Platform ini memungkinkan admin mengelola dengan antarmuka yang intuitif dan responsif.
 
-![BotWA Admin Panel Preview](https://via.placeholder.com/1200x600?text=BotWA+Admin+Panel)
+![Admin Panel Preview](image.png)
 
 ## ✨ Fitur Utama
 
@@ -56,7 +56,7 @@ Admin panel untuk BotWA dengan autentikasi JWT, MongoDB, dan Next.js. Platform i
 
    Edit `.env.local` dan sesuaikan dengan pengaturan Anda:
    ```
-   MONGODB_URI=mongodb+srv://yourusername:yourpassword@cluster.mongodb.net/botwa?retryWrites=true&w=majority
+   MONGODB_URI=mongodb+srv://yourusername:yourpassword@cluster.mongodb.net/adminpanel?retryWrites=true&w=majority
    JWT_SECRET=your-secure-jwt-secret-key
    NEXT_PUBLIC_BASE_URL=http://localhost:3000
    ```
